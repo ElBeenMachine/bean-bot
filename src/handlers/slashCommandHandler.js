@@ -3,7 +3,7 @@ const { PermissionsBitField } = require("discord.js");
 const { readdirSync } = require("fs");
 
 module.exports = async (client) => {
-    logger.info("[HANDLER - SLASH COMMANDS] - Started Loading Slash Commands");
+    logger.info("[HANDLER - SLASH COMMANDS] - Loading Slash Commands");
     let commands = [];
 
     readdirSync("./src/slashCommands/").forEach(dir => {
@@ -32,6 +32,5 @@ module.exports = async (client) => {
     });
 
     // Set the commands
-    logger.info("[HANDLER - COMMANDS] - Loading commands into production");
-    await client.application.commands.set(commands).catch((e) => logger.error(e));
+    await client.application.commands.set(commands).then(() => logger.success("[HANDLER - COMMANDS] - Slash commands loaded")).catch((e) => logger.error(e));
 }

@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "nodemon src/index",
-    "build": "docker build . -t beenhamo/bean-bot"
+    "build": "docker build . -t beenhamo/bean-bot",
+    "publish": "npm run build && docker push beenhamo/bean-bot"
   },
   "keywords": [],
   "author": "",
