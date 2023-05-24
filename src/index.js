@@ -1,38 +1,65 @@
-require('dotenv').config();
+const { 
+    Client, 
+    Partials, 
+    Collection, 
+    GatewayIntentBits 
+} = require('discord.js');
 
-// Set start time
-process.env.START_TIME = new Date().toISOString();
+require("dotenv").config();
 
-const Discord = require('discord.js');
-const CommandManager = require('./commands/commandManager');
-const EventManager = require('./events/eventManager');
-const config = require('../config.json');
+const logger = require("./utils/logger");
 
-const allIntents = new Discord.Intents(32767);
-const Logger = require('./utils/logger');
+const start = async () => {
+    const client = new Client({
+        shards: "auto",
+        allowedMentions: {
+            parse: ["roles", "users", "everyone"],
+            repliedUser: false
+        },
+        intents: [
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildPresences,
+            GatewayIntentBits.GuildMessageReactions,
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.MessageContent, 
+            GatewayIntentBits.GuildVoiceStates
+        ],
+        partials: [
+            Partials.Channel,
+            Partials.Message,
+            Partials.User,
+            Partials.GuildMember,
+            Partials.Reaction
+        ],
+        presence: {
+            status: 'dnd'
+        }
+    });
+    
+    // Set the config file of the bot
+    client.config = require("../config");
+    
+    // Create different collections
+    client.slash_commands = new Collection();
+    client.events = new Collection();
+    
+    module.exports = client;
 
-const client = new Discord.Client({ intents: allIntents });
-client.config = config;
+    // Load events handler
+    require("./handlers/eventHandler")(client);
+    
+    // Log In
+    client.login(process.env.TOKEN).catch(err => {
+        logger.error("[LOGIN] - An error has occurred while trying to log in. Exiting...")
+        console.error(err);
+        process.exit(0);
+    });
+    
+    // Handle unhandled errors
+    process.on("unhandledRejection", error => console.error(error));
+    process.on("uncaughtException", error => console.error(error.stack));
+}
 
-const commandManager = new CommandManager();
-client.commandManager = commandManager;
-
-const eventManager = new EventManager(client);
-client.eventManager = eventManager;
-
-eventManager.registerEvents();
-
-commandManager.scanSlashCommand();
-
-client.once('ready', async () => {
-    await commandManager.registerSlashCommands();
-    Logger.success(`[Discord] Connected! You're in as ${client.user.username}`);
-    client.user.setActivity('Something creative');
-});
-
-process.on('uncaughtException', (error) => {
-    Logger.error(`[Process] Uncaught exception:\n${error.stack}\n`);
-    process.exit(1);
-});
-
-client.login(process.env.TOKEN);
+// Start the bot
+start();

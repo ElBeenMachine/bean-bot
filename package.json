@@ -4,18 +4,15 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@discordjs/builders": "^1.6.3",
-    "@discordjs/collection": "^1.5.1",
-    "@discordjs/rest": "^1.7.1",
     "colors": "^1.4.0",
-    "discord-api-types": "^0.37.42",
     "discord.js": "^14.11.0",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.3",
     "moment": "^2.29.4"
   },
   "scripts": {
     "dev": "nodemon src/index",
-    "build": "docker build . -t beenhamo/bean-bot"
+    "build": "docker build . -t beenhamo/bean-bot",
+    "publish": "npm run build && docker push beenhamo/bean-bot"
   },
   "keywords": [],
   "author": "",
