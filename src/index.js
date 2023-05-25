@@ -7,6 +7,8 @@ const {
 
 require("dotenv").config();
 
+const { Player } = require("discord-player");
+
 const logger = require("./utils/logger");
 
 const start = async () => {
@@ -39,6 +41,13 @@ const start = async () => {
     
     // Set the config file of the bot
     client.config = require("../config");
+
+    // Set up music player
+    client.player = new Player(client);
+    client.player.extractors.loadDefault();
+
+    // Fix YTDL error with extractors
+    process.env.DP_FORCE_YTDL_MOD="@distube/ytdl-core";
     
     // Create different collections
     client.slash_commands = new Collection();

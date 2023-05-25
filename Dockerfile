@@ -4,6 +4,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+RUN apk update
+RUN apk add
+RUN apk add ffmpeg
+
 RUN npm i
 
 COPY . .
