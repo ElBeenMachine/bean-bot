@@ -96,7 +96,7 @@ client.player.events.on("playerStart", async (queue, track) => {
     queue.metadata.nowPlaying = response.id;
 
     try {
-        const confirmation = await response.awaitMessageComponent({ time: 180000 });
+        const confirmation = await response.awaitMessageComponent({ time: 300000 });
         if (confirmation.customId === 'skip') {
             skipSong(confirmation);
         }
