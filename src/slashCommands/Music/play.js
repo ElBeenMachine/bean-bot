@@ -1,3 +1,4 @@
+const { QueryType } = require("discord-player");
 const { Embed } = require("../../utils/Embeds");
 
 const name = "play";
@@ -25,9 +26,15 @@ module.exports = {
         if(botChannel && userChannel != botChannel) throw new Error("You must be in my voice channel to use this command.");
 
         const query = interaction.options.getString("query");
+        const result = await client.player.search(query, {
+            requestedBy: interaction.member,
+            searchEnging: QueryType.AUTO
+        }).catch(e => {
+            throw e;
+        });
 
         try {
-            await client.player.play(userChannel, query, {
+            await client.player.play(userChannel, result, {
                 nodeOptions: {
                     leaveOnEmpty: false,
                     leaveOnEnd: true,
@@ -39,11 +46,11 @@ module.exports = {
                 await interaction.editReply({
                     embeds: [
                         new Embed(interaction)
-                            .setTitle(`${track.title}`)
-                            .setURL(track.url)
+                            .setTitle(result.playlist ? result.playlist.title : track.title)
+                            .setURL(result.playlist ? result.playlist.url : track.url)
                             .setColor("Green")
-                            .setAuthor({ name: "Song Added to queue"})
-                            .setFooter({ text: `Song Requested by ${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL() })
+                            .setAuthor({ name: result.playlist ? `${result.playlist.tracks.length} Songs Added to queue` : `Song Added to queue` })
+                            .setFooter({ text: `${result.playlist ? "Songs" : "Song"} Requested by ${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL() })
                     ]
                 });
             });
