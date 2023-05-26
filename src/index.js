@@ -33,10 +33,7 @@ const start = async () => {
             Partials.User,
             Partials.GuildMember,
             Partials.Reaction
-        ],
-        presence: {
-            status: 'dnd'
-        }
+        ]
     });
     
     // Set the config file of the bot

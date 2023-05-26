@@ -19,6 +19,7 @@ module.exports = {
         if(botChannel && userChannel != botChannel) throw new Error("You must be in my voice channel to use this command.");
 
         const queue = client.player.nodes.get(interaction.guild.id);
+        const track = queue.currentTrack;
 
         try {
             // Skip the current song
@@ -27,8 +28,21 @@ module.exports = {
                 embeds: [
                     new Embed(interaction)
                         .setColor("Purple")
-                        .setAuthor({ name: "Song Skipped" })
-                        .setFooter(null)
+                        .setAuthor({ name: "Song Skipped", iconURL: client.user.displayAvatarURL() })
+                        .setTitle(`${track.title}`)
+                        .setURL(track.url)
+                        .setThumbnail(track.thumbnail)
+                        .addFields([
+                            {
+                                name: "Artist",
+                                value: track.author,
+                                inline: true
+                            },
+                            {
+                                name: "Skipped By",
+                                value: interaction.user.username
+                            }
+                        ])
                 ]
             });
         } catch(e) {
