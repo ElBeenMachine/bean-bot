@@ -32,5 +32,18 @@ module.exports = async (client) => {
     });
 
     // Set the commands
-    await client.application.commands.set(commands).then(() => logger.success("[HANDLER - COMMANDS] - Slash commands loaded")).catch((e) => logger.error(e));
+    switch (process.env.MODE) {
+        case "DEV":
+                if(process.env.DEV_ID) {
+                    logger.warn(`[HANDLER - COMMANDS] - Loading commands into development guild with id ${process.env.DEV_ID}`)
+                    await client.application.commands.set(commands, process.env.DEV_ID).then(() => logger.warn("[HANDLER - COMMANDS] - Slash commands loaded in development environment")).catch((e) => logger.error(e));
+                } else {
+                    throw new Error("DEV_ID environment variable is not set")
+                }
+            break;
+    
+        default:
+                await client.application.commands.set(commands).then(() => logger.success("[HANDLER - COMMANDS] - Slash commands loaded")).catch((e) => logger.error(e));
+            break;
+    }
 }
