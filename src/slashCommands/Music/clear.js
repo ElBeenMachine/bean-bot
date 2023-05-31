@@ -29,9 +29,6 @@ module.exports = {
                     new Embed(interaction)
                         .setColor("Purple")
                         .setAuthor({ name: "Clear", iconURL: client.user.displayAvatarURL() })
-                        .setTitle(`${track.title}`)
-                        .setURL(track.url)
-                        .setThumbnail(track.thumbnail)
                         .addFields([
                             {
                                 name: "Done",
