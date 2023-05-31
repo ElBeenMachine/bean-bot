@@ -1,4 +1,5 @@
 const { Embed } = require("../../utils/Embeds");
+const MusicChannelCheck = require("../../utils/MusicChannelCheck");
 
 const name = "clear";
 
@@ -11,12 +12,7 @@ module.exports = {
     },
     run: async (client, interaction) => {
         await interaction.deferReply();
-        const userChannel = interaction.member.voice.channel;
-        if(!userChannel) throw new Error("You must be in a voice channel to use this command.");
-
-        const botChannel = interaction.guild.members.me.voice.channelId;
-
-        if(botChannel && userChannel != botChannel) throw new Error("You must be in my voice channel to use this command.");
+        await MusicChannelCheck(interaction);
 
         const queue = client.player.nodes.get(interaction.guild.id);
         if(!queue) throw new Error("No Queue");
