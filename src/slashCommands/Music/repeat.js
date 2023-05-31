@@ -1,11 +1,11 @@
 const { Embed } = require("../../utils/Embeds");
 const MusicChannelCheck = require("../../utils/MusicChannelCheck");
 
-const name = "clear";
+const name = "repeat";
 
 module.exports = {
     name,
-    description: "Clear the song queue",
+    description: "Repeat the current song queue",
     type: 1,
     permissions: {
         DEFUALT_MEMBER_PERMISSIONS: "SendMessages"
