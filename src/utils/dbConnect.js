@@ -5,7 +5,7 @@ Source :
 https://github.com/vercel/next.js/blob/canary/examples/with-mongodb-mongoose/utils/dbConnect.js 
 **/
 
-const MONGODB_URI = "mongodb://localhost:27017";
+const MONGODB_URI = `mongodb://localhost:${process.env.DB_PORT || 27017}`;
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
