@@ -44,10 +44,4 @@ module.exports = client;
 eventHandler(client);
 
 // Log in to Discord
-client
-    .login(process.env.BOT_TOKEN)
-    .then(() => {
-        console.log(`✅ Client logged in as ${client.user.username}`);
-        client.user.setActivity("Visual Studio Code");
-    })
-    .catch((err) => console.log(err));
+client.login(process.env.BOT_TOKEN).catch((err) => console.log(err));
