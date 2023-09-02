@@ -1,20 +1,25 @@
-const { readdirSync } = require("fs");
-const logger = require("../utils/logger");
+const getAllFiles = require("../utils/getAllFiles");
+const path = require("path");
 
-module.exports = (client) => {
-    logger.info("[HANDLER - EVENTS] - Started loading events")
-    readdirSync("./src/events/").forEach(dir => {
-        const events = readdirSync(`./src/events/${dir}`).filter(file => file.endsWith(".js"));
-        for(let file of events) {
-            let pull = require(`../events/${dir}/${file}`);
-            if(pull.name) {
-                client.events.set(pull.name, pull);
-                logger.success(`[HANDLER - EVENTS] - Loaded an event: ${pull.name}`);
-            } else {
-                logger.error(`[HANDLER - EVENTS] - Failed to load the file ${file}. Missing name or aliases`);
-                continue;
+function eventHandler(client) {
+    const eventFolders = getAllFiles(
+        path.join(__dirname, "..", "events"),
+        true
+    );
+
+    for (const eventFolder of eventFolders) {
+        const eventFiles = getAllFiles(eventFolder);
+        eventFiles.sort((a, b) => a > b);
+
+        const eventName = eventFolder.replace(/\\/g, "/").split("/").pop();
+
+        client.on(eventName, async (arg) => {
+            for (const eventFile of eventFiles) {
+                const eventFunction = require(eventFile);
+                await eventFunction(client, arg);
             }
-        }
-    });
-    logger.info("[HANDLER - EVENTS] - Finished loading events")
+        });
+    }
 }
+
+module.exports = eventHandler;
