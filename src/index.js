@@ -6,6 +6,8 @@ const {
     Collection,
 } = require("discord.js");
 
+const eventHandler = require("./handlers/eventHandler");
+
 // Define the client
 const client = new Client({
     shards: "auto",
@@ -38,11 +40,14 @@ client.events = new Collection();
 // Export client if required
 module.exports = client;
 
+// Event handler
+eventHandler(client);
+
 // Log in to Discord
 client
     .login(process.env.BOT_TOKEN)
     .then(() => {
-        console.log(`Client logged in as ${client.user.username}`);
+        console.log(`✅ Client logged in as ${client.user.username}`);
         client.user.setActivity("Visual Studio Code");
     })
     .catch((err) => console.log(err));
