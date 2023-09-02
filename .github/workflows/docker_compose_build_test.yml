@@ -10,4 +10,4 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Build the stack
-              run: docker-compose up -d --env-file=/dev/null
+              run: docker compose --env-file=/dev/null up -d
