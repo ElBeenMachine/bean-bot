@@ -1,0 +1,13 @@
+name: Build Test
+on:
+    push:
+        branches:
+            - production
+            - beta
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Build the stack
+              run: docker-compose up -d
