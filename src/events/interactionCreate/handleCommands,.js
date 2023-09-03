@@ -34,7 +34,7 @@ module.exports = async (client, interaction) => {
 
         // Check if test server only
         if (commandObject.testOnly) {
-            if (!interaction.guid.id === testServer) {
+            if (!interaction.guild.id === testServer) {
                 interaction.reply({
                     content: "This command cannot be ran in this server.",
                     ephemeral: true,
