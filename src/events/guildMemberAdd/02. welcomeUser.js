@@ -29,7 +29,7 @@ module.exports = async (client, member) => {
                 "https://i.pinimg.com/736x/26/87/df/2687df3e5a5b1b8a5f95be66e4b87571.jpg"
             )
             .setAvatar(member.user.displayAvatarURL({ extension: "png" }))
-            .setName(member.user.username)
+            .setName(member.user.displayName)
             .setMemberCount(zeroPad(guild.memberCount, 3))
             .setBlur(2);
 
