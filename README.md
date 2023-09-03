@@ -20,4 +20,4 @@ Next, you need to register a bot with Discord and enable all intents. This can b
 
 Now that you have your database connection string and your bot token, you are ready to deploy your bot. Simply run the command below, and the bot will download and start.
 
-`docker run -e BOT_TOKEN="<BOT_TOKEN>" -e DB_URI="<DB_URI>" beenhamo/bean-bot`
+`docker run --name bean-bot -e BOT_TOKEN="<BOT_TOKEN>" -e DB_URI="<DB_URI>" beenhamo/bean-bot`
