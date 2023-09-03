@@ -12,6 +12,5 @@ module.exports = (client) => {
                 type: ActivityType.Watching,
             },
         ],
-        status: "dnd",
     });
 };
