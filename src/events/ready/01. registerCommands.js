@@ -19,7 +19,7 @@ module.exports = async (client) => {
             if (existingCommand) {
                 if (localCommand.deleted) {
                     await applicationCommands.delete(existingCommand.id);
-                    console.log(`🔴 Deleted command "${name}"`);
+                    console.log(`🔴 | Deleted command "${name}"`);
                     continue;
                 }
 
@@ -28,12 +28,12 @@ module.exports = async (client) => {
                         description,
                         options,
                     });
-                    console.log(`🔵 Edited command "${name}"`);
+                    console.log(`🔵 | Edited command "${name}"`);
                 }
             } else {
                 if (localCommand.deleted) {
                     console.log(
-                        `🟠 Skipping registration of command "${name}" as it is flagged as deleted.`
+                        `🟠 | Skipping registration of command "${name}" as it is flagged as deleted.`
                     );
                     continue;
                 }
@@ -44,12 +44,12 @@ module.exports = async (client) => {
                     options,
                 });
 
-                console.log(`🟢 Registered command "${name}"`);
+                console.log(`🟢 | Registered command "${name}"`);
             }
         }
     } catch (error) {
         console.log(
-            `🔴 There was an error while registering a command: ${error.message}`
+            `🔴 | There was an error while registering a command: ${error.message}`
         );
     }
 };
