@@ -1,6 +1,6 @@
 const { GuildMember, Client, AttachmentBuilder } = require("discord.js");
 const WelcomeChannel = require("../../models/WelcomeChannel");
-const { Welcomer } = require("canvacord");
+const Welcomer = require("../../structures/Welcomer");
 
 /**
  *
@@ -22,25 +22,23 @@ module.exports = async (client, member) => {
             welcomeChannel.channelID
         );
 
-        const welcomeCard = new Welcomer()
-            .setAvatar(
-                member.user.displayAvatarURL({ dynamic: false, format: "png" })
-            )
-            .setUsername(member.user.username)
-            .setDiscriminator(member.user.discriminator)
-            .setGuildName(member.guild.name)
-            .setMemberCount(member.guild.memberCount + 1)
-            .setBackground(
-                "https://media.istockphoto.com/id/1040600470/photo/futuristic-sci-fi-modern-empty-stage-reflective-concrete-room-with-purple-and-blue-glowing.jpg?s=170667a&w=0&k=20&c=1ouOfKQBWbmW2LOJ3PY0sd41XW2anfOjaiIO-cae8qs="
-            );
+        const zeroPad = (num, places) => String(num).padStart(places, "0");
 
-        const data = await welcomeCard.build();
+        const image = new Welcomer()
+            .setBackground(
+                "https://i.pinimg.com/736x/26/87/df/2687df3e5a5b1b8a5f95be66e4b87571.jpg"
+            )
+            .setAvatar(member.user.displayAvatarURL({ extension: "png" }))
+            .setName(member.user.username)
+            .setMemberCount(zeroPad(guild.memberCount, 3))
+            .setBlur(2);
 
         await targetChannel.send({
             content: `Welcome to the server, ${member}!`,
-            files: [data],
+            files: [await image.generate()],
         });
     } catch (error) {
+        console.log(error.stack);
         throw error;
     }
 };
