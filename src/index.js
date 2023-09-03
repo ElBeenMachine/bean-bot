@@ -10,10 +10,10 @@ const {
 
 // Test Connection to the database
 if (dbTest()) {
-    console.log(`🟢 Database connection established`);
+    console.log(`🟢 | Database connection established`);
 } else {
     console.log(
-        `🔴 Unable to connect to a database using the connection string provided.`
+        `🔴 | Unable to connect to a database using the connection string provided.`
     );
     throw Error(
         "Unable to connect to a database using the connection string provided."
@@ -60,4 +60,4 @@ eventHandler(client);
 // Log in to Discord
 client
     .login(process.env.BOT_TOKEN)
-    .catch((err) => console.log(`🔴 An error has occurred: ${err}`));
+    .catch((err) => console.log(`🔴 | An error has occurred: ${err}`));
