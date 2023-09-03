@@ -1,3 +1,11 @@
+const { Client } = require("discord.js");
+
+/**
+ *
+ * @param {Client} client
+ * @param {*} guildID
+ * @returns
+ */
 async function getApplicationCommands(client, guildID) {
     let applicationCommands = [];
 
