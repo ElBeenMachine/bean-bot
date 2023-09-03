@@ -10,10 +10,23 @@
 name: Publish Docker image
 
 on:
-    release:
-        types: [published]
+    push:
+        branches:
+            - production
 
 jobs:
+    tagged-release:
+        name: "Tagged Release"
+        runs-on: "ubuntu-latest"
+
+        steps:
+            - uses: "marvinpinto/action-automatic-releases@latest"
+              with:
+                  repo_token: "${{ secrets.GITHUB_TOKEN }}"
+                  automatic_release_tag: "latest"
+                  prerelease: false
+                  title: "Production Build"
+
     push_to_registry:
         name: Push Docker image to Docker Hub
         runs-on: ubuntu-latest
