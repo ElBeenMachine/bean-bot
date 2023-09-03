@@ -1,6 +1,13 @@
 const getLocalCommands = require("../../utils/commands/getLocalCommands");
 const { devs, testServer } = require("../../config");
+const { Client, Interaction } = require("discord.js");
 
+/**
+ *
+ * @param {Client, Interaction} client
+ * @param {Interaction} interaction
+ * @returns
+ */
 module.exports = async (client, interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
@@ -46,7 +53,7 @@ module.exports = async (client, interaction) => {
                         ephemeral: true,
                     });
 
-                    break;
+                    return;
                 }
             }
         }
@@ -62,7 +69,7 @@ module.exports = async (client, interaction) => {
                         ephemeral: true,
                     });
 
-                    break;
+                    return;
                 }
             }
         }
@@ -70,6 +77,10 @@ module.exports = async (client, interaction) => {
         // Execute
         await commandObject.callback(client, interaction);
     } catch (error) {
-        console.log(`There was an error running this command: ${error}`);
+        await interaction.deleteReply();
+        console.log(error);
+        interaction.channel.send(
+            `🔴 | There was an error running this command: ${error}`
+        );
     }
 };
