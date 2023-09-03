@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Publish Docker image
+name: Publish New Release
 
 on:
     push:
@@ -16,7 +16,7 @@ on:
 
 jobs:
     tagged-release:
-        name: "Tagged Release"
+        name: "Create Release"
         runs-on: "ubuntu-latest"
 
         steps:
@@ -28,7 +28,7 @@ jobs:
                   title: "Production Build"
 
     push_to_registry:
-        name: Push Docker image to Docker Hub
+        name: "Publish Release"
         runs-on: ubuntu-latest
         steps:
             - name: Check out the repo
