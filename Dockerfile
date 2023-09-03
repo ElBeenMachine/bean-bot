@@ -5,8 +5,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN apk update
-RUN apk add
-RUN apk add ffmpeg
+RUN apk add --update --no-cache ffmpeg 
 
 RUN npm i
 
