@@ -98,14 +98,14 @@ class Welcomer {
         ctx.fillStyle = "#FFFFFF";
         ctx.textAlign = "start";
         ctx.strokeStyle = "#f5f5f5";
-        ctx.fillText(`${name}`, 278, 113);
+        ctx.fillText(`${name}`, 258, 113);
 
-        ctx.strokeText(`${name}`, 278, 113);
+        ctx.strokeText(`${name}`, 258, 113);
 
         ctx.font = `bold 25px Arial Bold`;
         ctx.fillStyle = "#FFFFFF";
 
-        ctx.fillText(`${this.memberCount}`, 535, 156);
+        ctx.fillText(`${this.memberCount}`, 535, 200);
 
         let avatar = await jimp.read(this.avatar);
 
