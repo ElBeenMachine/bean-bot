@@ -10,7 +10,7 @@ In order for the bot to run, you must have an accessible MongoDB database. I wou
 
 Now that your database is set up, you will need to get your connection string. It should look something like this:
 
-`mongodb+srv://<username>:<password>@<db_url>.mongodb.net/`
+`mongodb+srv://<username>:<password>@<db_url>.mongodb.net/bean-bot`
 
 ## Getting your bot token
 
