@@ -46,7 +46,7 @@ module.exports = async (client, interaction) => {
                         ephemeral: true,
                     });
 
-                    break;
+                    return;
                 }
             }
         }
@@ -62,7 +62,7 @@ module.exports = async (client, interaction) => {
                         ephemeral: true,
                     });
 
-                    break;
+                    return;
                 }
             }
         }
