@@ -1,10 +1,24 @@
 require("dotenv").config();
+const dbTest = require("./utils/database/dbTest");
+
 const {
     Client,
     GatewayIntentBits,
     Partials,
     Collection,
 } = require("discord.js");
+
+// Test Connection to the database
+if (dbTest()) {
+    console.log(`🟢 Database connection established`);
+} else {
+    console.log(
+        `🔴 Unable to connect to a database using the connection string provided.`
+    );
+    throw Error(
+        "Unable to connect to a database using the connection string provided."
+    );
+}
 
 const eventHandler = require("./handlers/eventHandler");
 
@@ -44,4 +58,6 @@ module.exports = client;
 eventHandler(client);
 
 // Log in to Discord
-client.login(process.env.BOT_TOKEN).catch((err) => console.log(err));
+client
+    .login(process.env.BOT_TOKEN)
+    .catch((err) => console.log(`🔴 An error has occurred: ${err}`));
