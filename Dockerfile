@@ -7,15 +7,12 @@ COPY package*.json ./
 RUN apk update
 RUN apk add --update --no-cache \
     ffmpeg \
-    make \
-    g++ \
-    jpeg-dev \
-    cairo-dev \
-    giflib-dev \
-    pango-dev \
-    libtool \
-    autoconf \
-    automake
+    build-essential \
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev
 
 RUN npm i
 
