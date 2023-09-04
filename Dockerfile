@@ -16,7 +16,7 @@ RUN apk add --update --no-cache \
     pango-dev \
     cairo-dev \
     giflib-dev \
-    python
+    python3
 
 #  add glibc and install canvas
 RUN apk --no-cache add ca-certificates wget  && \
