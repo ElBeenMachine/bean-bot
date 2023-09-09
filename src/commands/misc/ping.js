@@ -1,4 +1,5 @@
 const { Client, Interaction } = require("discord.js");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "ping",
@@ -21,8 +22,12 @@ module.exports = {
 
         const ping = reply.createdTimestamp - interaction.createdTimestamp;
 
-        interaction.editReply(
+        const embed = new Embed(
+            client,
+            "🏓 Pong!",
             `Pong! ${ping}ms | Websocket: ${client.ws.ping}ms`
         );
+
+        interaction.editReply({ embeds: [embed] });
     },
 };
