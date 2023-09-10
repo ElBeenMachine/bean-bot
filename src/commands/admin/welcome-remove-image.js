@@ -1,5 +1,6 @@
 const { Client, Interaction, PermissionFlagsBits } = require("discord.js");
 const WelcomeImage = require("../../models/WelcomeImage");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "welcome-remove-image",
@@ -16,28 +17,26 @@ module.exports = {
      * @param {Interaction} interaction
      */
     callback: async (client, interaction) => {
-        try {
-            await interaction.deferReply();
-
-            if (
-                !(await WelcomeImage.exists({
-                    guildID: interaction.guild.id,
-                }))
-            ) {
-                interaction.editReply(
-                    "No custom background has been set. Run `/welcome-set-image` to set one up."
-                );
-                return;
-            }
-
-            await WelcomeImage.findOneAndDelete({
+        if (
+            !(await WelcomeImage.exists({
                 guildID: interaction.guild.id,
-            });
-            interaction.editReply("Custom welcome background has been removed");
-        } catch (error) {
+            }))
+        ) {
             throw new Error(
-                `Unable to remove welcome background image: ${error}`
+                "No custom background has been set. Run `/welcome-set-image` to set one up."
             );
         }
+
+        await WelcomeImage.findOneAndDelete({
+            guildID: interaction.guild.id,
+        });
+
+        const successEmbed = new Embed(client, {
+            title: "Success",
+            description: "Custom welcome background has been removed",
+            color: 0xfff900,
+        });
+
+        interaction.editReply({ embeds: [successEmbed] });
     },
 };

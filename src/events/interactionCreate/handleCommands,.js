@@ -1,6 +1,7 @@
 const getLocalCommands = require("../../utils/commands/getLocalCommands");
 const { devs, testServer } = require("../../config");
 const { Client, Interaction } = require("discord.js");
+const Embed = require("../../structures/Embed");
 
 /**
  *
@@ -20,27 +21,19 @@ module.exports = async (client, interaction) => {
 
         if (!commandObject) return;
 
+        await interaction.deferReply();
+
         // Check if dev only
         if (commandObject.devOnly) {
             if (!devs.includes(interaction.member.id)) {
-                interaction.reply({
-                    content: "Only bot developers can use this command.",
-                    ephemeral: true,
-                });
-
-                return;
+                throw new Error("Only bot developers can use this command.");
             }
         }
 
         // Check if test server only
         if (commandObject.testOnly) {
-            if (!interaction.guild.id === testServer) {
-                interaction.reply({
-                    content: "This command cannot be ran in this server.",
-                    ephemeral: true,
-                });
-
-                return;
+            if (interaction.guild.id !== testServer) {
+                throw new Error("This command cannot be ran in this server.");
             }
         }
 
@@ -48,12 +41,7 @@ module.exports = async (client, interaction) => {
         if (commandObject.permissionsRequired?.length) {
             for (const permission of commandObject.permissionsRequired) {
                 if (!interaction.member.permissions.has(permission)) {
-                    interaction.reply({
-                        content: "Not enough permissions",
-                        ephemeral: true,
-                    });
-
-                    return;
+                    throw new Error("Not enough permissions");
                 }
             }
         }
@@ -64,12 +52,7 @@ module.exports = async (client, interaction) => {
                 const bot = interaction.guild.members.me;
 
                 if (!bot.permissions.has(permission)) {
-                    interaction.reply({
-                        content: "I don't have enough permissions.",
-                        ephemeral: true,
-                    });
-
-                    return;
+                    throw new Error("I don't have enough permissions.");
                 }
             }
         }
@@ -78,9 +61,18 @@ module.exports = async (client, interaction) => {
         await commandObject.callback(client, interaction);
     } catch (error) {
         await interaction.deleteReply();
+
         console.log(error);
-        interaction.channel.send(
-            `🔴 | There was an error running this command: ${error}`
-        );
+
+        const errorEmbed = new Embed(client, {
+            title: "An error has occurred",
+            description: error.message,
+            color: 0xff0000,
+        });
+
+        await interaction.channel.send({
+            embeds: [errorEmbed],
+            ephemeral: true,
+        });
     }
 };

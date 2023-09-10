@@ -1,4 +1,5 @@
 const { Client, Interaction } = require("discord.js");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "ping",
@@ -15,14 +16,15 @@ module.exports = {
      * @param {Interaction} interaction
      */
     callback: async (client, interaction) => {
-        await interaction.deferReply();
-
         const reply = await interaction.fetchReply();
 
         const ping = reply.createdTimestamp - interaction.createdTimestamp;
 
-        interaction.editReply(
-            `Pong! ${ping}ms | Websocket: ${client.ws.ping}ms`
-        );
+        const embed = new Embed(client, {
+            title: "🏓 Pong!",
+            description: `Pong! ${ping}ms | Websocket: ${client.ws.ping}ms`,
+        });
+
+        interaction.editReply({ embeds: [embed] });
     },
 };

@@ -6,6 +6,8 @@ const {
 } = require("discord.js");
 const AutoRole = require("../../models/AutoRole");
 
+const Embed = require("../../structures/Embed");
+
 module.exports = {
     name: "autorole-configure",
     description: "Set up autorole on your server",
@@ -30,46 +32,39 @@ module.exports = {
      */
     callback: async (client, interaction) => {
         if (!interaction.inGuild()) {
-            interaction.reply(
-                "This command can only be run inside of a server"
-            );
-
-            return;
+            throw new Error("This command can only be run inside of a server");
         }
 
         const targetRoleID = interaction.options.get("role").value;
 
-        try {
-            await interaction.deferReply();
+        let autoRole = await AutoRole.findOne({
+            guildID: interaction.guild.id,
+        });
 
-            let autoRole = await AutoRole.findOne({
-                guildID: interaction.guild.id,
-            });
-
-            if (autoRole) {
-                if (autoRole.roleID === targetRoleID) {
-                    interaction.editReply(
-                        "Autorole has already been cofigured for this role. To disable autorole, run `/autorole-disable`"
-                    );
-
-                    return;
-                }
-
-                autoRole.roleID = targetRoleID;
-            } else {
-                autoRole = new AutoRole({
-                    guildID: interaction.guild.id,
-                    roleID: targetRoleID,
-                });
+        if (autoRole) {
+            if (autoRole.roleID === targetRoleID) {
+                throw new Error(
+                    "Autorole has already been cofigured for this role. To disable autorole, run `/autorole-disable`"
+                );
             }
 
-            await autoRole.save();
-
-            interaction.editReply(
-                "Autorole has now been configured. To disable autorole, run `/autorole-disable`"
-            );
-        } catch (error) {
-            throw new Error(`Unable to configure autorole: ${error}`);
+            autoRole.roleID = targetRoleID;
+        } else {
+            autoRole = new AutoRole({
+                guildID: interaction.guild.id,
+                roleID: targetRoleID,
+            });
         }
+
+        await autoRole.save();
+
+        const successEmbed = new Embed(client, {
+            title: "Success",
+            description:
+                "Autorole has now been configured. To disable autorole, run `/autorole-disable`",
+            color: 0xfff900,
+        });
+
+        interaction.editReply({ embeds: [successEmbed] });
     },
 };

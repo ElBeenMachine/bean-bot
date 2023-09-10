@@ -6,6 +6,7 @@ const {
 } = require("discord.js");
 const WelcomeImage = require("../../models/WelcomeImage");
 const validateImage = require("../../utils/web/validateImage");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "welcome-set-image",
@@ -30,55 +31,46 @@ module.exports = {
      */
     callback: async (client, interaction) => {
         if (!interaction.inGuild()) {
-            interaction.reply(
-                "This command can only be run inside of a server"
-            );
-
-            return;
+            throw new Error("This command can only be run inside of a server");
         }
 
         const url = interaction.options.get("url").value;
 
         if ((await validateImage(url)) === null) {
-            interaction.reply(
+            throw new Error(
                 "Please enter a URL that corresponds to an image either in JPEG or PNG format."
             );
-            return;
         }
 
-        try {
-            await interaction.deferReply();
+        let welcomeImage = await WelcomeImage.findOne({
+            guildID: interaction.guild.id,
+        });
 
-            let welcomeImage = await WelcomeImage.findOne({
-                guildID: interaction.guild.id,
-            });
-
-            if (welcomeImage) {
-                if (welcomeImage.imageURL === url) {
-                    interaction.editReply(
-                        "A custom welcome message background has already been set. To revert back to the default, run `/welcome-remove-image`"
-                    );
-
-                    return;
-                }
-
-                welcomeImage.imageURL = url;
-            } else {
-                welcomeImage = new WelcomeImage({
-                    guildID: interaction.guild.id,
-                    imageURL: url,
-                });
+        if (welcomeImage) {
+            if (welcomeImage.imageURL === url) {
+                throw new Error(
+                    "A custom welcome message background has already been set. To revert back to the default, run `/welcome-remove-image`"
+                );
             }
 
-            await welcomeImage.save();
-
-            interaction.editReply(
-                `Welcome background has been set to the following image. To revert back to the default, run \`/welcome-remove-image\`\n\n${url}`
-            );
-        } catch (error) {
-            throw new Error(
-                `Unable to configure custom welcome message background: ${error}`
-            );
+            welcomeImage.imageURL = url;
+        } else {
+            welcomeImage = new WelcomeImage({
+                guildID: interaction.guild.id,
+                imageURL: url,
+            });
         }
+
+        await welcomeImage.save();
+
+        const successEmbed = new Embed(client, {
+            title: "Success",
+            description: `Welcome background has been set to the following image. To revert back to the default, run \`/welcome-remove-image\``,
+            color: 0xfff900,
+        });
+
+        successEmbed.setImage(url);
+
+        interaction.editReply({ embeds: [successEmbed] });
     },
 };
