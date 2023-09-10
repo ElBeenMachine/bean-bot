@@ -3,6 +3,7 @@ const {
     Interaction,
     ApplicationCommandOptionType,
 } = require("discord.js");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "test-join",
@@ -26,8 +27,14 @@ module.exports = {
      * @param {Interaction} interaction
      */
     callback: async (client, interaction) => {
-        await interaction.reply({
-            content: "Simulating user joining...",
+        const embed = new Embed(client, {
+            title: "Simulating",
+            description:
+                "An event has been fired to simulate a user joining this server.",
+        });
+
+        await interaction.editReply({
+            embeds: [embed],
             ephemeral: true,
         });
 

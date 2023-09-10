@@ -5,6 +5,7 @@ const {
     PermissionFlagsBits,
 } = require("discord.js");
 const WelcomeChannel = require("../../models/WelcomeChannel");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "welcome-configure",
@@ -30,46 +31,37 @@ module.exports = {
      */
     callback: async (client, interaction) => {
         if (!interaction.inGuild()) {
-            interaction.reply(
-                "This command can only be run inside of a server"
-            );
-
-            return;
+            throw new Error("This command can only be run inside of a server");
         }
 
         const targetChannelID = interaction.options.get("channel").value;
 
-        try {
-            await interaction.deferReply();
+        let welcomeChannel = await WelcomeChannel.findOne({
+            guildID: interaction.guild.id,
+        });
 
-            let welcomeChannel = await WelcomeChannel.findOne({
-                guildID: interaction.guild.id,
-            });
-
-            if (welcomeChannel) {
-                if (welcomeChannel.channelID === targetChannelID) {
-                    interaction.editReply(
-                        "Welcome messages are already being sent to this channel. To disable welcome messages, run `/welcome-disable`"
-                    );
-
-                    return;
-                }
-
-                welcomeChannel.channelID = targetChannelID;
-            } else {
-                welcomeChannel = new WelcomeChannel({
-                    guildID: interaction.guild.id,
-                    channelID: targetChannelID,
-                });
+        if (welcomeChannel) {
+            if (welcomeChannel.channelID === targetChannelID) {
+                throw new Error(
+                    "Welcome messages are already being sent to this channel. To disable welcome messages, run `/welcome-disable`"
+                );
             }
 
-            await welcomeChannel.save();
-
-            interaction.editReply(
-                "Welcome messages have now been configured. To disable welcome messages, run `/welcome-disable`"
-            );
-        } catch (error) {
-            throw new Error(`Unable to configure welcome messages: ${error}`);
+            welcomeChannel.channelID = targetChannelID;
+        } else {
+            welcomeChannel = new WelcomeChannel({
+                guildID: interaction.guild.id,
+                channelID: targetChannelID,
+            });
         }
+
+        await welcomeChannel.save();
+
+        const successEmbed = new Embed(client, {
+            title: "Success",
+            description: `Welcome messages have now been configured to be sent to <#${welcomeChannel.channelID}>. To disable welcome messages, run \`/welcome-disable\``,
+            color: 0xfff900,
+        });
+        interaction.editReply({ embeds: [successEmbed] });
     },
 };

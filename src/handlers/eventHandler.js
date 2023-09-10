@@ -24,9 +24,7 @@ function eventHandler(client) {
                 try {
                     await eventFunction(client, arg);
                 } catch (error) {
-                    console.log(
-                        `🔴 | An error occurred while executing an event: ${error}`
-                    );
+                    console.log(error);
                     continue;
                 }
             }

@@ -4,6 +4,7 @@ const {
     Client,
     Interaction,
 } = require("discord.js");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "ban",
@@ -37,22 +38,14 @@ module.exports = {
         const reason =
             interaction.options.get("reason")?.value || "No reason provided";
 
-        await interaction.deferReply();
-
         const targetUser = await interaction.guild.members.fetch(targetUserID);
 
         if (!targetUser) {
-            await interaction.editReply(
-                "That user no longer exists in this server"
-            );
-            return;
+            throw new Error("That user no longer exists in this server");
         }
 
         if (targetUser.id === interaction.guild.ownerId) {
-            await interaction.editReply(
-                "You cannot ban the owner of the server."
-            );
-            return;
+            throw new Error("You cannot ban the owner of the server.");
         }
 
         const targetUserRolePosition = targetUser.roles.highest.position;
@@ -62,26 +55,36 @@ module.exports = {
             interaction.guild.members.me.roles.highest.position;
 
         if (targetUserRolePosition >= requestUserRolePosition) {
-            await interaction.editReply(
+            throw new Error(
                 "You cannot ban that user because they have the same/higher role than you."
             );
-            return;
         }
 
         if (targetUserRolePosition >= botRolePosition) {
-            await interaction.editReply(
+            throw new Error(
                 "I cannot ban that user because they have the same/higher role than me"
             );
-            return;
         }
 
-        try {
-            await targetUser.ban({ reason });
-            await interaction.editReply(
-                `User ${targetUser} was banned.\nReason: ${reason}`
-            );
-        } catch (error) {
-            throw new Error(`There was an error when banning a user: ${error}`);
-        }
+        await targetUser.ban({ reason });
+        const bannedEmbed = new Embed(client, {
+            title: "🔨 User Banned",
+            color: 0xfff900,
+        });
+
+        bannedEmbed.addFields([
+            {
+                name: "User",
+                value: `${targetUser}`,
+                inline: true,
+            },
+            {
+                name: "Reason",
+                value: reason,
+                inline: true,
+            },
+        ]);
+
+        await interaction.editReply({ embeds: [bannedEmbed] });
     },
 };

@@ -1,21 +1,19 @@
 const { EmbedBuilder, Client } = require("discord.js");
 
 class Embed extends EmbedBuilder {
-    #title;
-    #description;
-
     /**
      *
      * @param {Client} client
-     * @param {String} title
-     * @param {String} description
+     * @param {Object} options
      */
-    constructor(client, title = "Untitled Embed", description = "") {
+    constructor(client, options = {}) {
         super();
-        this.setTitle(title);
-        this.setDescription(description);
+        this.setTitle(options?.title || "Untitled Embed");
+        if (options?.description) {
+            this.setDescription(options.description);
+        }
         this.setTimestamp();
-        this.setColor(0x00ffff);
+        this.setColor(options?.color || 0x00ffff);
         this.setFooter({
             text: `${client.user.username} | Created By Ollie B`,
             iconURL: client.user.displayAvatarURL(),

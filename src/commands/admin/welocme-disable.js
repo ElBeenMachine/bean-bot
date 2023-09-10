@@ -1,5 +1,6 @@
 const { Client, Interaction, PermissionFlagsBits } = require("discord.js");
 const WelcomeChannel = require("../../models/WelcomeChannel");
+const Embed = require("../../structures/Embed");
 
 module.exports = {
     name: "welcome-disable",
@@ -16,28 +17,28 @@ module.exports = {
      * @param {Interaction} interaction
      */
     callback: async (client, interaction) => {
-        try {
-            await interaction.deferReply();
-
-            if (
-                !(await WelcomeChannel.exists({
-                    guildID: interaction.guild.id,
-                }))
-            ) {
-                interaction.editReply(
-                    "Welcome messages have not yet been configured for this server. Run `/welcome-configure` to set them up."
-                );
-                return;
-            }
-
-            await WelcomeChannel.findOneAndDelete({
+        if (
+            !(await WelcomeChannel.exists({
                 guildID: interaction.guild.id,
-            });
-            interaction.editReply(
-                "Welcome messages have been disabled on this server"
+            }))
+        ) {
+            throw new Error(
+                "Welcome messages have not yet been configured for this server. Run `/welcome-configure` to set them up."
             );
-        } catch (error) {
-            throw new Error(`Unable to disable welcome messages: ${error}`);
         }
+
+        await WelcomeChannel.findOneAndDelete({
+            guildID: interaction.guild.id,
+        });
+
+        const successEmbed = new Embed(client, {
+            title: "Success",
+            description: "Welcome messages have been disabled on this server",
+            color: 0xfff900,
+        });
+
+        interaction.editReply({
+            embeds: [successEmbed],
+        });
     },
 };
