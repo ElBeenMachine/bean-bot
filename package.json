@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node ./src/index.js",
         "dev": "nodemon ./src/index.js",
-        "build": "docker build -t bot-beta ."
+        "build": "docker build -t bot-beta .",
+        "test": "docker run -d --env-file .env bot-beta"
     },
     "author": "Beantech Ltd.",
     "license": "ISC",
