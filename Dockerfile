@@ -1,21 +1,16 @@
-FROM node:20-alpine
+FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-
-RUN apk update
 RUN apk add --update --no-cache \
-    ffmpeg \
     make \
     g++ \
     jpeg-dev \
     cairo-dev \
     giflib-dev \
-    pango-dev \
-    libtool \
-    autoconf \
-    automake
+    pango-dev
+
+COPY package*.json ./
 
 RUN npm i
 
