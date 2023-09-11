@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
@@ -8,7 +8,8 @@ RUN apk add --update --no-cache \
     jpeg-dev \
     cairo-dev \
     giflib-dev \
-    pango-dev
+    pango-dev \
+    ffmpeg
 
 COPY package*.json ./
 
