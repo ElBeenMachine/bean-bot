@@ -1,10 +1,7 @@
-const { ActivityType, Client } = require("discord.js");
+const { ActivityType } = require("discord.js");
+const client = require("../../../index");
 
-/**
- *
- * @param {Client} client
- */
-module.exports = (client) => {
+client.on(__dirname.split("\\").pop(), () => {
     client.user.setPresence({
         activities: [
             {
@@ -13,4 +10,4 @@ module.exports = (client) => {
             },
         ],
     });
-};
+});

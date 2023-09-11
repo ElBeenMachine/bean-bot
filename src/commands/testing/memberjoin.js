@@ -9,7 +9,7 @@ module.exports = {
     name: "test-join",
     description: "Simulate a user joining the current server",
     devOnly: true,
-    testOnly: true,
+    testOnly: false,
     deleted: false,
     options: [
         {

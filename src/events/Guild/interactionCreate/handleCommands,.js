@@ -1,15 +1,10 @@
-const getLocalCommands = require("../../utils/commands/getLocalCommands");
-const { devs, testServer } = require("../../config");
+const getLocalCommands = require("../../../utils/commands/getLocalCommands");
+const { devs, testServer } = require("../../../config");
 const { Client, Interaction } = require("discord.js");
-const Embed = require("../../structures/Embed");
+const Embed = require("../../../structures/Embed");
+const client = require("../../../index");
 
-/**
- *
- * @param {Client, Interaction} client
- * @param {Interaction} interaction
- * @returns
- */
-module.exports = async (client, interaction) => {
+client.on(__dirname.split("\\").pop(), async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
     const localCommands = getLocalCommands();
@@ -75,4 +70,4 @@ module.exports = async (client, interaction) => {
             ephemeral: true,
         });
     }
-};
+});

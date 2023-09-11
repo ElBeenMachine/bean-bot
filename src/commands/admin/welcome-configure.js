@@ -62,6 +62,7 @@ module.exports = {
             description: `Welcome messages have now been configured to be sent to <#${welcomeChannel.channelID}>. To disable welcome messages, run \`/welcome-disable\``,
             color: 0xfff900,
         });
-        interaction.editReply({ embeds: [successEmbed] });
+
+        await interaction.editReply({ embeds: [successEmbed] });
     },
 };

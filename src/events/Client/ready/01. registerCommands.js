@@ -1,14 +1,10 @@
-const { Client } = require("discord.js");
-const areCommandsDifferent = require("../../utils/commands/areCommandsDifferent");
-const getApplicationCommands = require("../../utils/commands/getApplicationCommands");
-const getLocalCommands = require("../../utils/commands/getLocalCommands");
-const { testServer } = require("../../config");
+const areCommandsDifferent = require("../../../utils/commands/areCommandsDifferent");
+const getApplicationCommands = require("../../../utils/commands/getApplicationCommands");
+const getLocalCommands = require("../../../utils/commands/getLocalCommands");
+const { testServer } = require("../../../config");
+const client = require("../../../index");
 
-/**
- *
- * @param {Client} client
- */
-module.exports = async (client) => {
+client.on(__dirname.split("\\").pop(), async () => {
     try {
         const localCommands = getLocalCommands();
         const applicationCommands = await getApplicationCommands(client);
@@ -57,4 +53,4 @@ module.exports = async (client) => {
             `🔴 | There was an error while registering a command: ${error.message}`
         );
     }
-};
+});

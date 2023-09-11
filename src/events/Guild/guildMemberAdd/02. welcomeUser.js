@@ -1,15 +1,16 @@
-const { GuildMember, Client, AttachmentBuilder } = require("discord.js");
-const WelcomeChannel = require("../../models/WelcomeChannel");
-const Welcomer = require("../../structures/Welcomer");
-const WelcomeImage = require("../../models/WelcomeImage");
-const validateImage = require("../../utils/web/validateImage");
+const { GuildMember, Client } = require("discord.js");
+const WelcomeChannel = require("../../../models/WelcomeChannel");
+const Welcomer = require("../../../structures/Welcomer");
+const WelcomeImage = require("../../../models/WelcomeImage");
+const validateImage = require("../../../utils/web/validateImage");
+const client = require("../../../index");
 
 /**
  *
  * @param {Client} client
  * @param {GuildMember} member
  */
-module.exports = async (client, member) => {
+client.on(__dirname.split("\\").pop(), async (member) => {
     try {
         let guild = member.guild;
         if (!guild) return;
@@ -49,4 +50,4 @@ module.exports = async (client, member) => {
     } catch (error) {
         throw error;
     }
-};
+});

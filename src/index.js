@@ -1,11 +1,6 @@
 require("dotenv").config();
 
-const {
-    Client,
-    GatewayIntentBits,
-    Partials,
-    Collection,
-} = require("discord.js");
+const { Client, GatewayIntentBits, Partials } = require("discord.js");
 
 const eventHandler = require("./handlers/eventHandler");
 const mongoose = require("mongoose");
@@ -36,20 +31,31 @@ const client = new Client({
     ],
 });
 
+// Define the player
+const { Player } = require("discord-player");
+
+client.player = new Player(client);
+client.player.extractors.loadDefault();
+
+module.exports = client;
+
+// Fix YTDL error with extractors
+process.env.DP_FORCE_YTDL_MOD = "@distube/ytdl-core";
+
 (async () => {
     try {
         mongoose.set("strictQuery", false);
         await mongoose.connect(process.env.DB_URI);
         console.log(`🟢 | Connection established with the database`);
-
-        // Event handler
-        eventHandler(client);
     } catch (error) {
         console.log(
             `🔴 | Unable to connect to a database using the provided URI: ${error}`
         );
         process.exit(1);
     }
+
+    // Event handler
+    eventHandler(client);
 })();
 
 // Log in to Discord
