@@ -4,7 +4,7 @@ const getLocalCommands = require("../../../utils/commands/getLocalCommands");
 const { testServer } = require("../../../config");
 const client = require("../../../index");
 
-client.on(__dirname.split("\\").pop(), async () => {
+client.on(__dirname.replace(/\\/g, "/").split("/").pop(), async () => {
     try {
         const localCommands = getLocalCommands();
         const applicationCommands = await getApplicationCommands(client);

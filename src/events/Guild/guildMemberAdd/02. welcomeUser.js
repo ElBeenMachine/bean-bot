@@ -10,7 +10,7 @@ const client = require("../../../index");
  * @param {Client} client
  * @param {GuildMember} member
  */
-client.on(__dirname.split("\\").pop(), async (member) => {
+client.on(__dirname.replace(/\\/g, "/").split("/").pop(), async (member) => {
     try {
         let guild = member.guild;
         if (!guild) return;
