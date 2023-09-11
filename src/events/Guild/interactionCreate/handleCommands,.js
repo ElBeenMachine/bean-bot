@@ -63,8 +63,6 @@ client.on(
         } catch (error) {
             await interaction.deleteReply();
 
-            console.log(error);
-
             const errorEmbed = new Embed(client, {
                 title: "An error has occurred",
                 description: error.message,
