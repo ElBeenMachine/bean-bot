@@ -25,6 +25,6 @@ module.exports = {
             description: `Pong! ${ping}ms | Websocket: ${client.ws.ping}ms`,
         });
 
-        interaction.editReply({ embeds: [embed] });
+        await interaction.editReply({ embeds: [embed] });
     },
 };

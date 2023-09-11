@@ -71,6 +71,6 @@ module.exports = {
 
         successEmbed.setImage(url);
 
-        interaction.editReply({ embeds: [successEmbed] });
+        await interaction.editReply({ embeds: [successEmbed] });
     },
 };

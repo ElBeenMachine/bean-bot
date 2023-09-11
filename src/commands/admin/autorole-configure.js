@@ -65,6 +65,6 @@ module.exports = {
             color: 0xfff900,
         });
 
-        interaction.editReply({ embeds: [successEmbed] });
+        await interaction.editReply({ embeds: [successEmbed] });
     },
 };

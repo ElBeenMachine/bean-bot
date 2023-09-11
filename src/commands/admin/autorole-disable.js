@@ -29,6 +29,7 @@ module.exports = {
             description: "Autorole has been disabled on this server",
             color: 0xfff900,
         });
-        interaction.editReply({ embeds: [successEmbed] });
+
+        await interaction.editReply({ embeds: [successEmbed] });
     },
 };
