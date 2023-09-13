@@ -1,6 +1,11 @@
 require("dotenv").config();
 
-const { Client, GatewayIntentBits, Partials } = require("discord.js");
+const {
+    Client,
+    GatewayIntentBits,
+    Partials,
+    ActivityType,
+} = require("discord.js");
 
 const eventHandler = require("./handlers/eventHandler");
 const mongoose = require("mongoose");
@@ -11,6 +16,14 @@ const client = new Client({
     allowedMentions: {
         parse: ["roles", "users", "everyone"],
         repliedUser: false,
+    },
+    presence: {
+        activities: [
+            {
+                name: "the world burn 🔥",
+                type: ActivityType.Watching,
+            },
+        ],
     },
     intents: [
         GatewayIntentBits.Guilds,
