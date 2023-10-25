@@ -15,7 +15,7 @@ class Embed extends EmbedBuilder {
         this.setTimestamp();
         this.setColor(options?.color || 0x00ffff);
         this.setFooter({
-            text: `${client.user.username} | Created By Ollie B`,
+            text: `${client.user.username}   |   Created By Ollie B`,
             iconURL: client.user.displayAvatarURL(),
         });
     }
